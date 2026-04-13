@@ -1,6 +1,8 @@
 string = input("Enter a string: ")
 
-if string == string[::-1]:
-    print("Palindrome")
+reverse = string[::-1]
+
+if string == reverse:
+    print("Given string is palindrome")
 else:
-    print("Not Palindrome")
+    print("Given string is not palindrome")
