@@ -1,0 +1,78 @@
+9th
+app.py
+
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "AI Model Running Successfully inside Docker!"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+
+Dockerfile
+FROM python:3.9
+
+WORKDIR /app
+
+COPY . .
+
+RUN pip install -r requirements.txt
+
+CMD ["python", "app.py"]
+
+
+docker build -t ai-model-app .
+docker run -d -p 5000:5000 ai-model-app
+
+..................................................................................................................
+
+10th
+
+docker-compose.yml
+version: '3'
+services:
+    backend:
+      build: ./backend
+      ports:
+
+        - "5000:5000"
+    frontend:
+      build: ./frontend
+      ports:
+        - "8080:80"
+    database:
+      image: mysql:5.7
+      environment:
+        MYSQL_ROOT_PASSWORD: root
+
+backend
+app.py
+from flask import Flask
+app = Flask(__name__)
+@app.route('/')
+def home():
+    return "AI Model Running!"
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+
+Dockerfile
+FROM python:3.10
+WORKDIR /app
+COPY . .
+RUN pip install -r requirements.txt
+EXPOSE 5000
+CMD ["python", "app.py"]
+
+Frontend
+Dockerfile
+FROM nginx:latest
+COPY index.html /usr/share/nginx/html/index.html
+EXPOSE 80
+
+index.html
+<h1>Frontend Connected to AI Backend</h1>
+
+docker compose up --build
